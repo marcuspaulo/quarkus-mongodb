@@ -8,7 +8,12 @@ If you want to learn more about Quarkus, please visit its website: https://quark
 
 You can run your application in dev mode that enables live coding using:
 ```shell script
-./mvnw compile quarkus:dev
+./mvnw quarkus:dev
+```
+
+# MongoDB Docker
+```shell script
+docker run -ti --rm -p 27017:27017 mongo:4.0
 ```
 
 > **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.

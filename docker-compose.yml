@@ -1,0 +1,46 @@
+version: '3'
+services:
+  quarkus-build:
+    build:
+      context: .
+      dockerfile: src/main/docker/Dockerfile.jvm
+    depends_on:
+      - mongo-express
+    ports:
+      - "8080:8080"
+    networks:
+      - mongo-compose-network
+  mongo:
+    container_name: mongo
+    image: tutum/mongodb
+    environment:
+      MONGODB_DATABASE: fruit
+      MONGODB_USER: mongodb
+      MONGODB_PASS: mongodb
+    ports:
+      - "27017:27017"
+      - "28017:28017"
+    networks:
+      - mongo-compose-network
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: '"false"'
+#      ME_CONFIG_BASICAUTH_USERNAME: mongo
+#      ME_CONFIG_BASICAUTH_PASSWORD: mongo
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_AUTH_DATABASE: fruit
+      ME_CONFIG_MONGODB_AUTH_USERNAME: mongodb
+      ME_CONFIG_MONGODB_AUTH_PASSWORD: mongodb
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    networks:
+      - mongo-compose-network
+networks:
+  mongo-compose-network:
+    driver: bridge
